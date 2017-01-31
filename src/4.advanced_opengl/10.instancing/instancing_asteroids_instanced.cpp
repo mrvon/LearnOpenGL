@@ -1,4 +1,5 @@
 // GLEW
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
@@ -13,6 +14,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <learnopengl/filesystem.h>
 
 // Properties
 GLuint screenWidth = 800, screenHeight = 600;
@@ -36,11 +39,11 @@ int main()
 {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", nullptr, nullptr); // Windowed
     glfwMakeContextCurrent(window);
@@ -57,7 +60,9 @@ int main()
     glewInit();
 
     // Define the viewport dimensions
-    glViewport(0, 0, screenWidth, screenHeight);
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
 
     // Setup OpenGL options
     glEnable(GL_DEPTH_TEST);
@@ -67,8 +72,8 @@ int main()
     Shader instanceShader("instanced_asteroids.vs", "instanced_asteroids.frag");
 
     // Load models
-    Model rock("../../../resources/objects/rock/rock.obj");
-    Model planet("../../../resources/objects/planet/planet.obj");
+    Model rock(FileSystem::getPath("resources/objects/rock/rock.obj").c_str());
+    Model planet(FileSystem::getPath("resources/objects/planet/planet.obj").c_str());
 
     // Set projection matrix
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 1.0f, 10000.0f);
@@ -110,17 +115,19 @@ int main()
         modelMatrices[i] = model;
     }
 
+    // forward declare the buffer
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
+
     // Set transformation matrices as an instance vertex attribute (with divisor 1)
     // NOTE: We're cheating a little by taking the, now publicly declared, VAO of the model's mesh(es) and adding new vertexAttribPointers
     // Normally you'd want to do this in a more organized fashion, but for learning purposes this will do.
     for(GLuint i = 0; i < rock.meshes.size(); i++)
     {
         GLuint VAO = rock.meshes[i].VAO;
-        GLuint buffer;
         glBindVertexArray(VAO);
-        glGenBuffers(1, &buffer);
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
         // Set attribute pointers for matrix (4 times vec4)
         glEnableVertexAttribArray(3); 
         glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)0);
@@ -171,13 +178,19 @@ int main()
 
         // Draw meteorites
         instanceShader.Use();
+        // NB: This could all be implemented as a method within the Model class, perhaps "DrawInstanced(const GLuint amount)"
+        glActiveTexture(GL_TEXTURE0); // Activate proper texture unit before binding
+        glUniform1i(glGetUniformLocation(instanceShader.Program, "texture_diffuse1"), 0); // Now set the sampler to the correct texture unit
         glBindTexture(GL_TEXTURE_2D, rock.textures_loaded[0].id); // Note we also made the textures_loaded vector public (instead of private) from the model class.
         for(GLuint i = 0; i < rock.meshes.size(); i++)
         {
             glBindVertexArray(rock.meshes[i].VAO);
-            glDrawElementsInstanced(GL_TRIANGLES, rock.meshes[i].vertices.size(), GL_UNSIGNED_INT, 0, amount);
+            glDrawElementsInstanced(GL_TRIANGLES, rock.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount);
             glBindVertexArray(0);
         }
+        // reset our texture binding
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 0);
         
         // Swap the buffers
         glfwSwapBuffers(window);

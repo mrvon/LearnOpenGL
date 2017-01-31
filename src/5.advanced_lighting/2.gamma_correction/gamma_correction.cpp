@@ -1,4 +1,5 @@
 // GLEW
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
@@ -15,6 +16,7 @@
 
 // Other Libs
 #include <SOIL.h>
+#include <learnopengl/filesystem.h>
 
 // Properties
 const GLuint SCR_WIDTH = 800, SCR_HEIGHT = 600;
@@ -24,7 +26,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
-GLuint loadTexture(GLchar* path, bool gammaCorrection);
+GLuint loadTexture(GLchar const * path, bool gammaCorrection);
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -34,18 +36,18 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // Options
-GLboolean Gamma = false;
+GLboolean gammaEnabled = false;
 
 // The MAIN function, from here we start our application and run our Game loop
 int main()
 {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", nullptr, nullptr); // Windowed
     glfwMakeContextCurrent(window);
@@ -112,8 +114,8 @@ int main()
     };
 
     // Load textures
-    GLuint floorTexture = loadTexture("../../../resources/textures/wood.png", false);
-    GLuint floorTextureGammaCorrected = loadTexture("../../../resources/textures/wood.png", true);
+    GLuint floorTexture = loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str(), false);
+    GLuint floorTextureGammaCorrected = loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str(), true);
 
     // Game loop
     while (!glfwWindowShouldClose(window))
@@ -141,14 +143,14 @@ int main()
         glUniform3fv(glGetUniformLocation(shader.Program, "lightPositions"), 4, &lightPositions[0][0]);
         glUniform3fv(glGetUniformLocation(shader.Program, "lightColors"), 4, &lightColors[0][0]);
         glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
-        glUniform1i(glGetUniformLocation(shader.Program, "gamma"), Gamma);
+        glUniform1i(glGetUniformLocation(shader.Program, "gamma"), gammaEnabled);
         // Floor
         glBindVertexArray(planeVAO);
-        glBindTexture(GL_TEXTURE_2D, Gamma ? floorTextureGammaCorrected : floorTexture);
+        glBindTexture(GL_TEXTURE_2D, gammaEnabled ? floorTextureGammaCorrected : floorTexture);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
 
-        std::cout << (Gamma ? "Gamma enabled" : "Gamma disabled") << std::endl;
+        std::cout << (gammaEnabled ? "Gamma enabled" : "Gamma disabled") << std::endl;
 
         // Swap the buffers
         glfwSwapBuffers(window);
@@ -161,7 +163,7 @@ int main()
 // This function loads a texture from file. Note: texture loading functions like these are usually 
 // managed by a 'Resource Manager' that manages all resources (like textures, models, audio). 
 // For learning purposes we'll just define it as a utility function.
-GLuint loadTexture(GLchar* path, bool gammaCorrection)
+GLuint loadTexture(GLchar const * path, bool gammaCorrection)
 {
     // Generate texture ID and load texture data 
     GLuint textureID;
@@ -201,7 +203,7 @@ void Do_Movement()
 
     if (keys[GLFW_KEY_SPACE] && !keysPressed[GLFW_KEY_SPACE])
     {
-        Gamma = !Gamma;
+        gammaEnabled = !gammaEnabled;
         keysPressed[GLFW_KEY_SPACE] = true;
     }
 }

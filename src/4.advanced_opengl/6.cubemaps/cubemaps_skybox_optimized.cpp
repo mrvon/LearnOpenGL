@@ -4,6 +4,7 @@
 using namespace std;
 
 // GLEW
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
@@ -20,6 +21,7 @@ using namespace std;
 
 // Other Libs
 #include <SOIL.h>
+#include <learnopengl/filesystem.h>
 
 // Properties
 GLuint screenWidth = 800, screenHeight = 600;
@@ -29,8 +31,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void Do_Movement();
-GLuint loadTexture(GLchar* path);
-GLuint loadCubemap(std::vector<const GLchar*> faces);
+GLuint loadTexture(GLchar const * path);
+GLuint loadCubemap(std::vector<std::string> faces);
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -48,11 +50,11 @@ int main()
 {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", nullptr, nullptr); // Windowed
     glfwMakeContextCurrent(window);
@@ -197,13 +199,13 @@ int main()
 #pragma endregion
 
     // Cubemap (Skybox)
-    std::vector<const GLchar*> faces;
-    faces.push_back("../../../resources/textures/skybox/right.jpg");
-    faces.push_back("../../../resources/textures/skybox/left.jpg");
-    faces.push_back("../../../resources/textures/skybox/top.jpg");
-    faces.push_back("../../../resources/textures/skybox/bottom.jpg");
-    faces.push_back("../../../resources/textures/skybox/back.jpg");
-    faces.push_back("../../../resources/textures/skybox/front.jpg");
+    std::vector<std::string> faces;
+    faces.push_back(FileSystem::getPath("resources/textures/skybox/right.jpg"));
+    faces.push_back(FileSystem::getPath("resources/textures/skybox/left.jpg"));
+    faces.push_back(FileSystem::getPath("resources/textures/skybox/top.jpg"));
+    faces.push_back(FileSystem::getPath("resources/textures/skybox/bottom.jpg"));
+    faces.push_back(FileSystem::getPath("resources/textures/skybox/back.jpg"));
+    faces.push_back(FileSystem::getPath("resources/textures/skybox/front.jpg"));
     GLuint skyboxTexture = loadCubemap(faces);
 
     // Draw as wireframe
@@ -271,7 +273,7 @@ int main()
 // -Y (bottom)
 // +Z (front)? (CHECK THIS)
 // -Z (back)?
-GLuint loadCubemap(std::vector<const GLchar*> faces)
+GLuint loadCubemap(std::vector<std::string> faces)
 {
     GLuint textureID;
     glGenTextures(1, &textureID);
@@ -283,7 +285,7 @@ GLuint loadCubemap(std::vector<const GLchar*> faces)
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
     for (GLuint i = 0; i < faces.size(); i++)
     {
-        image = SOIL_load_image(faces[i], &width, &height, 0, SOIL_LOAD_RGB);
+        image = SOIL_load_image(faces[i].c_str(), &width, &height, 0, SOIL_LOAD_RGB);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
     }
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -300,7 +302,7 @@ GLuint loadCubemap(std::vector<const GLchar*> faces)
 // This function loads a texture from file. Note: texture loading functions like these are usually 
 // managed by a 'Resource Manager' that manages all resources (like textures, models, audio). 
 // For learning purposes we'll just define it as a utility function.
-GLuint loadTexture(GLchar* path)
+GLuint loadTexture(GLchar const * path)
 {
     //Generate texture ID and load texture data 
     GLuint textureID;

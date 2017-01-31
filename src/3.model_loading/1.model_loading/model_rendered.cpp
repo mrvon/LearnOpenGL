@@ -2,6 +2,7 @@
 #include <string>
 
 // GLEW
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
@@ -19,6 +20,7 @@
 
 // Other Libs
 #include <SOIL.h>
+#include <learnopengl/filesystem.h>
 
 // Properties
 GLuint screenWidth = 800, screenHeight = 600;
@@ -43,11 +45,11 @@ int main()
 {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", nullptr, nullptr); // Windowed
     glfwMakeContextCurrent(window);
@@ -65,7 +67,9 @@ int main()
     glewInit();
 
     // Define the viewport dimensions
-    glViewport(0, 0, screenWidth, screenHeight);
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
 
     // Setup some OpenGL options
     glEnable(GL_DEPTH_TEST);
@@ -74,8 +78,8 @@ int main()
     Shader shader("shader.vs", "shader.frag");
 
     // Load models
-    Model ourModel("../../../resources/objects/nanosuit/nanosuit.obj");
-    
+    Model ourModel(FileSystem::getPath("resources/objects/nanosuit/nanosuit.obj").c_str());
+
     // Draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 

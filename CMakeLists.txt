@@ -91,9 +91,11 @@ set(CHAPTERS
     3.model_loading
     4.advanced_opengl
     5.advanced_lighting
+    6.pbr
+    7.in_practice
 )
 
-set(1.getting_started   
+set(1.getting_started
     1.hello_window
     2.hello_triangle
     3.shaders
@@ -134,14 +136,36 @@ set(5.advanced_lighting
     2.gamma_correction
     3.1.shadow_mapping
     3.2.point_shadows
-    # 3.3.csm
-    # 4.normal_mapping
-    # 5.parallax_mapping
-    # 6.hdr
-    # 7.bloom
-    # 8.deferred_shading
-    # 9.ssao
+    3.3.csm
+    4.normal_mapping
+    5.parallax_mapping
+    6.hdr
+    7.bloom
+    8.deferred_shading
+    9.ssao
 )
+
+set(6.pbr
+    1.1.lighting
+    1.2.lighting_textured
+    # 2.1.1.ibl_irradiance_conversion
+    # 2.1.2.ibl_irradiance
+    # 2.2.ibl_specular
+)
+
+set(7.in_practice
+    # 1.debugging
+    # 2.text_rendering
+)
+
+
+
+configure_file(configuration/root_directory.h.in configuration/root_directory.h)
+include_directories(${CMAKE_BINARY_DIR}/configuration)
+
+# first create relevant static libraries requried for other projects
+add_library(STB_IMAGE "src/stb_image.cpp")
+set(LIBS ${LIBS} STB_IMAGE)
 
 foreach(CHAPTER ${CHAPTERS})
     foreach(DEMO ${${CHAPTER}})
