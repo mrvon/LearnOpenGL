@@ -8,6 +8,11 @@
 #include <sstream>
 #include <iostream>
 
+// GLM Mathematics
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 class Shader
 {
 public:
@@ -26,7 +31,7 @@ public:
         vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
         fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
         gShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-        try 
+        try
         {
             // Open files
             vShaderFile.open(vertexPath);
@@ -34,13 +39,13 @@ public:
             std::stringstream vShaderStream, fShaderStream;
             // Read file's buffer contents into streams
             vShaderStream << vShaderFile.rdbuf();
-            fShaderStream << fShaderFile.rdbuf();		
+            fShaderStream << fShaderFile.rdbuf();
             // close file handlers
             vShaderFile.close();
             fShaderFile.close();
             // Convert stream into string
             vertexCode = vShaderStream.str();
-            fragmentCode = fShaderStream.str();			
+            fragmentCode = fShaderStream.str();
 			// If geometry shader path is present, also load a geometry shader
 			if(geometryPath != nullptr)
 			{
@@ -96,8 +101,36 @@ public:
 			glDeleteShader(geometry);
 
     }
+
     // Uses the current shader
-    void Use() { glUseProgram(this->Program); }
+    void Use() {
+        glUseProgram(this->Program);
+    }
+
+    void setBool(const std::string &name, bool value) {
+        GLint location = glGetUniformLocation(this->Program, name.c_str());
+        glUniform1i(location, (int)value);
+    }
+
+    void setInt(const std::string &name, int value) {
+        GLint location = glGetUniformLocation(this->Program, name.c_str());
+        glUniform1i(location, value);
+    }
+
+    void setFloat(const std::string &name, float value) {
+        GLint location = glGetUniformLocation(this->Program, name.c_str());
+        glUniform1f(location, value);
+    }
+
+    void setVec3(const std::string &name, glm::vec3 value) {
+        GLint location = glGetUniformLocation(this->Program, name.c_str());
+        glUniform3f(location, value.x, value.y, value.z);
+    }
+
+    void setMatrix4(const std::string &name, glm::mat4 matrix4) {
+        GLint location = glGetUniformLocation(this->Program, name.c_str());
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix4));
+    }
 
 private:
     void checkCompileErrors(GLuint shader, std::string type)

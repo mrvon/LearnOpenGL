@@ -1,13 +1,13 @@
 #include <iostream>
 
 // GLEW
-#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
 #include <GLFW/glfw3.h>
 
 // Other includes
+#include <math.h>
 #include <learnopengl/shader.h>
 
 
@@ -18,8 +18,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 // The MAIN function, from here we start the application and run the game loop
-int main()
-{
+int main() {
     // Init GLFW
     glfwInit();
     // Set all the required options for GLFW
@@ -46,17 +45,15 @@ int main()
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
-
     // Build and compile our shader program
     Shader ourShader("basic.vs", "basic.frag");
-
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
         // Positions         // Colors
-        0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f,  // Bottom Right
-       -0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  // Bottom Left
-        0.0f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f   // Top 
+        -0.5f, 0.5f, 0.0f,   1.0f, 0.0f, 0.0f,  // Bottom Right
+        0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  // Bottom Left
+        0.0f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f   // Top
     };
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -76,10 +73,8 @@ int main()
 
     glBindVertexArray(0); // Unbind VAO
 
-
     // Game loop
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
         glfwPollEvents();
 
@@ -90,6 +85,7 @@ int main()
 
         // Draw the triangle
         ourShader.Use();
+
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
@@ -97,17 +93,20 @@ int main()
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
+
     // Properly de-allocate all resources once they've outlived their purpose
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+
     // Terminate GLFW, clearing any resources allocated by GLFW.
     glfwTerminate();
+
     return 0;
 }
 
 // Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 }

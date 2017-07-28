@@ -8,7 +8,7 @@ Message( " " )
 Message( FATAL_ERROR "Source and build directories are the same.
 Create an empty build directory,
 change into it and re-invoke cmake")
-endif() 
+endif()
 
 # adding glew
 add_definitions(-DGLEW_STATIC)
@@ -48,8 +48,8 @@ elseif(UNIX)
   find_package(OpenGL REQUIRED)
   list(APPEND LIBS ${OPENGL_gl_LIBRARY}) # setting LIBS for the first time
   add_definitions(${OPENGL_DEFINITIONS})
-  find_package(X11 REQUIRED)
-  list(APPEND LIBS ${X11_Xrandr_LIB} ${X11_Xxf86vm_LIB} ${X11_Xinerama_LIB} ${X11_Xi_LIB} ${X11_Xcursor_LIB})
+  # find_package(X11 REQUIRED)
+  # list(APPEND LIBS ${X11_Xrandr_LIB} ${X11_Xxf86vm_LIB} ${X11_Xinerama_LIB} ${X11_Xi_LIB} ${X11_Xcursor_LIB})
   find_package(Threads REQUIRED)
   list(APPEND LIBS ${CMAKE_THREAD_LIBS_INIT})
   #find_library(RT_LIB rt)
@@ -181,7 +181,7 @@ foreach(CHAPTER ${CHAPTERS})
 			set_target_properties(${DEMO} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin/${CHAPTER}")
 		endif(WIN32)
         # copy shader files to build directory
-        file(GLOB SHADERS 
+        file(GLOB SHADERS
                  "src/${CHAPTER}/${DEMO}/*.vs"
                  "src/${CHAPTER}/${DEMO}/*.frag"
                  "src/${CHAPTER}/${DEMO}/*.gs"
@@ -191,7 +191,7 @@ foreach(CHAPTER ${CHAPTERS})
             	# configure_file(${SHADER} "test")
             	add_custom_command(TARGET ${DEMO} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SHADER} $<TARGET_FILE_DIR:${DEMO}>)
 			elseif(UNIX)
-				file(COPY ${SHADER} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin/${CHAPTER})			
+				file(COPY ${SHADER} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/bin/${CHAPTER})
 			endif(WIN32)
 
         endforeach(SHADER)
