@@ -11,7 +11,6 @@ using namespace std;
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-
 struct Vertex {
     // Position
     glm::vec3 Position;
@@ -33,16 +32,15 @@ struct Texture {
 
 class Mesh {
 public:
-    /*  Mesh Data  */
+    /* Mesh Data */
     vector<Vertex> vertices;
     vector<GLuint> indices;
     vector<Texture> textures;
     GLuint VAO;
 
-    /*  Functions  */
+    /* Functions */
     // Constructor
-    Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> textures)
-    {
+    Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> textures) {
         this->vertices = vertices;
         this->indices = indices;
         this->textures = textures;
@@ -52,31 +50,34 @@ public:
     }
 
     // Render the mesh
-    void Draw(Shader shader)
-    {
+    void Draw(Shader shader) {
         // Bind appropriate textures
         GLuint diffuseNr = 1;
         GLuint specularNr = 1;
         GLuint normalNr = 1;
         GLuint heightNr = 1;
-        for(GLuint i = 0; i < this->textures.size(); i++)
-        {
-            glActiveTexture(GL_TEXTURE0 + i); // Active proper texture unit before binding
+        for(GLuint i = 0; i < this->textures.size(); i++) {
+            // Active proper texture unit before binding
+            glActiveTexture(GL_TEXTURE0 + i);
             // Retrieve texture number (the N in diffuse_textureN)
             stringstream ss;
             string number;
             string name = this->textures[i].type;
-            if(name == "texture_diffuse")
+            if(name == "texture_diffuse") {
                 ss << diffuseNr++; // Transfer GLuint to stream
-            else if(name == "texture_specular")
+            }
+            else if(name == "texture_specular") {
                 ss << specularNr++; // Transfer GLuint to stream
-            else if(name == "texture_normal")
+            }
+            else if(name == "texture_normal") {
                 ss << normalNr++; // Transfer GLuint to stream
-             else if(name == "texture_height")
+            }
+            else if(name == "texture_height") {
                 ss << heightNr++; // Transfer GLuint to stream
+            }
             number = ss.str();
             // Now set the sampler to the correct texture unit
-            glUniform1i(glGetUniformLocation(shader.Program, (name + number).c_str()), i);
+            shader.setInt((name + number).c_str(), i);
             // And finally bind the texture
             glBindTexture(GL_TEXTURE_2D, this->textures[i].id);
         }
@@ -87,21 +88,19 @@ public:
         glBindVertexArray(0);
 
         // Always good practice to set everything back to defaults once configured.
-        for (GLuint i = 0; i < this->textures.size(); i++)
-        {
+        for (GLuint i = 0; i < this->textures.size(); i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             glBindTexture(GL_TEXTURE_2D, 0);
         }
     }
 
 private:
-    /*  Render data  */
+    /* Render data */
     GLuint VBO, EBO;
 
-    /*  Functions    */
+    /* Functions */
     // Initializes all the buffer objects/arrays
-    void setupMesh()
-    {
+    void setupMesh() {
         // Create buffers/arrays
         glGenVertexArrays(1, &this->VAO);
         glGenBuffers(1, &this->VBO);
@@ -110,9 +109,11 @@ private:
         glBindVertexArray(this->VAO);
         // Load data into vertex buffers
         glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-        // A great thing about structs is that their memory layout is sequential for all its items.
-        // The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
-        // again translates to 3/2 floats which translates to a byte array.
+        // A great thing about structs is that their memory layout is sequential
+        // for all its items.  The effect is that we can simply pass a pointer
+        // to the struct and it translates perfectly to a glm::vec3/2 array
+        // which again translates to 3/2 floats which translates to a byte
+        // array.
         glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(Vertex), &this->vertices[0], GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
@@ -138,6 +139,3 @@ private:
         glBindVertexArray(0);
     }
 };
-
-
-
