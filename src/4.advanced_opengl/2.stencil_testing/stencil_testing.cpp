@@ -186,13 +186,16 @@ int main() {
         shaderSingleColor.Use();
         glm::mat4 model;
         glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 projection = glm::perspective(camera.Zoom, (float)screenWidth/(float)screenHeight, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(
+                camera.Zoom,
+                (float)screenWidth / (float)screenHeight,
+                0.1f,
+                100.0f);
         shaderSingleColor.setMatrix4("view", view);
         shaderSingleColor.setMatrix4("projection", projection);
         shader.Use();
         shader.setMatrix4("view", view);
         shader.setMatrix4("projection", projection);
-
 
         // Draw floor as normal, we only care about the containers. The floor
         // should NOT fill the stencil buffer so we set its mask to 0x00
@@ -223,9 +226,11 @@ int main() {
         glBindVertexArray(0);
 
         // == =============
-        // 2nd. Render pass, now draw slightly scaled versions of the objects, this time disabling stencil writing.
-        // Because stencil buffer is now filled with several 1s. The parts of the buffer that are 1 are now not drawn, thus only drawing
-        // the objects' size differences, making it look like borders.
+        // 2nd. Render pass, now draw slightly scaled versions of the objects,
+        // this time disabling stencil writing.  Because stencil buffer is now
+        // filled with several 1s. The parts of the buffer that are 1 are now
+        // not drawn, thus only drawing the objects' size differences, making it
+        // look like borders.
         glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
         glStencilMask(0x00);
         glDisable(GL_DEPTH_TEST);
