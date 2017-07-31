@@ -1,4 +1,4 @@
-# learnopengl.com in macOS
+# learnopengl.com in macOS and Linux
 
 Contains code samples for all tutorials of [http://learnopengl.com](http://learnopengl.com).
 
