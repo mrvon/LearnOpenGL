@@ -26,10 +26,15 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", nullptr, nullptr); // Windowed
+    if (window == NULL) {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
     glfwMakeContextCurrent(window);
 
     // Options
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);	
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Set the required callback functions
     glfwSetKeyCallback(window, key_callback);
@@ -82,7 +87,7 @@ int main()
         glBindVertexArray(VAO);
         glDrawArrays(GL_POINTS, 0, 4);
         glBindVertexArray(0);
-        
+
         // Swap the buffers
         glfwSwapBuffers(window);
     }
@@ -100,5 +105,5 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if(action == GLFW_PRESS)
         keys[key] = true;
     else if(action == GLFW_RELEASE)
-        keys[key] = false;	
+        keys[key] = false;
 }

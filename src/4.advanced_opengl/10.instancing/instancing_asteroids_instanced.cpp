@@ -46,6 +46,11 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "LearnOpenGL", nullptr, nullptr); // Windowed
+    if (window == NULL) {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
     glfwMakeContextCurrent(window);
 
     // Set the required callback functions
@@ -53,7 +58,7 @@ int main()
     glfwSetCursorPosCallback(window, mouse_callback);
 
     // Options
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);	
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Initialize GLEW to setup the OpenGL Function pointers
     glewExperimental = GL_TRUE;
@@ -87,7 +92,7 @@ int main()
     GLuint amount = 100000;
     glm::mat4* modelMatrices;
     modelMatrices = new glm::mat4[amount];
-    srand(glfwGetTime()); // initialize random seed	
+    srand(glfwGetTime()); // initialize random seed
     GLfloat radius = 150.0f;
     GLfloat offset = 25.0f;
     for(GLuint i = 0; i < amount; i++)
@@ -102,11 +107,11 @@ int main()
         displacement = (rand() % (GLint)(2 * offset * 100)) / 100.0f - offset;
         GLfloat z = cos(angle) * radius + displacement;
         model = glm::translate(model, glm::vec3(x, y, z));
-        
+
         // 2. Scale: Scale between 0.05 and 0.25f
         GLfloat scale = (rand() % 20) / 100.0f + 0.05;
-        model = glm::scale(model, glm::vec3(scale));		
-        
+        model = glm::scale(model, glm::vec3(scale));
+
         // 3. Rotation: add random rotation around a (semi)randomly picked rotation axis vector
         GLfloat rotAngle = (rand() % 360);
         model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
@@ -129,13 +134,13 @@ int main()
         GLuint VAO = rock.meshes[i].VAO;
         glBindVertexArray(VAO);
         // Set attribute pointers for matrix (4 times vec4)
-        glEnableVertexAttribArray(3); 
+        glEnableVertexAttribArray(3);
         glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)0);
-        glEnableVertexAttribArray(4); 
+        glEnableVertexAttribArray(4);
         glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(sizeof(glm::vec4)));
-        glEnableVertexAttribArray(5); 
+        glEnableVertexAttribArray(5);
         glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(2 * sizeof(glm::vec4)));
-        glEnableVertexAttribArray(6); 
+        glEnableVertexAttribArray(6);
         glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (GLvoid*)(3 * sizeof(glm::vec4)));
 
         glVertexAttribDivisor(3, 1);
@@ -164,9 +169,9 @@ int main()
 
         // Add transformation matrices
         planetShader.Use();
-        glUniformMatrix4fv(glGetUniformLocation(planetShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));	
+        glUniformMatrix4fv(glGetUniformLocation(planetShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
         instanceShader.Use();
-        glUniformMatrix4fv(glGetUniformLocation(instanceShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));	
+        glUniformMatrix4fv(glGetUniformLocation(instanceShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
 
         // Draw Planet
         planetShader.Use();
@@ -191,7 +196,7 @@ int main()
         // reset our texture binding
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, 0);
-        
+
         // Swap the buffers
         glfwSwapBuffers(window);
     }
@@ -227,7 +232,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if(action == GLFW_PRESS)
         keys[key] = true;
     else if(action == GLFW_RELEASE)
-        keys[key] = false;	
+        keys[key] = false;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -240,12 +245,12 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
 
     GLfloat xoffset = xpos - lastX;
-    GLfloat yoffset = lastY - ypos; 
-    
+    GLfloat yoffset = lastY - ypos;
+
     lastX = xpos;
     lastY = ypos;
 
     camera.ProcessMouseMovement(xoffset, yoffset);
-}	
+}
 
 #pragma endregion
