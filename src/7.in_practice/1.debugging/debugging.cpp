@@ -1,4 +1,3 @@
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -14,7 +13,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 // properties
 const GLuint SCR_WIDTH = 800, SCR_HEIGHT = 600;
-
 
 GLenum glCheckError_(const char *file, int line)
 {
@@ -38,12 +36,12 @@ GLenum glCheckError_(const char *file, int line)
 }
 #define glCheckError() glCheckError_(__FILE__, __LINE__)
 
-void APIENTRY glDebugOutput(GLenum source, 
-                            GLenum type, 
-                            GLuint id, 
-                            GLenum severity, 
-                            GLsizei length, 
-                            const GLchar *message, 
+void APIENTRY glDebugOutput(GLenum source,
+                            GLenum type,
+                            GLuint id,
+                            GLenum severity,
+                            GLsizei length,
+                            const GLchar *message,
                             void *userParam)
 {
     if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return; // ignore these non-significant error codes
@@ -65,7 +63,7 @@ void APIENTRY glDebugOutput(GLenum source,
     {
         case GL_DEBUG_TYPE_ERROR:               std::cout << "Type: Error"; break;
         case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: std::cout << "Type: Deprecated Behaviour"; break;
-        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cout << "Type: Undefined Behaviour"; break; 
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cout << "Type: Undefined Behaviour"; break;
         case GL_DEBUG_TYPE_PORTABILITY:         std::cout << "Type: Portability"; break;
         case GL_DEBUG_TYPE_PERFORMANCE:         std::cout << "Type: Performance"; break;
         case GL_DEBUG_TYPE_MARKER:              std::cout << "Type: Marker"; break;
@@ -73,7 +71,7 @@ void APIENTRY glDebugOutput(GLenum source,
         case GL_DEBUG_TYPE_POP_GROUP:           std::cout << "Type: Pop Group"; break;
         case GL_DEBUG_TYPE_OTHER:               std::cout << "Type: Other"; break;
     } std::cout << std::endl;
-    
+
     switch (severity)
     {
         case GL_DEBUG_SEVERITY_HIGH:         std::cout << "Severity: high"; break;
@@ -92,7 +90,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // comment this line in a release build! 
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // comment this line in a release build!
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", nullptr, nullptr); // Windowed
     glfwMakeContextCurrent(window);
 
@@ -103,7 +101,7 @@ int main()
     glewExperimental = GL_TRUE;
     glewInit();
     // due to a bug in GLEW the glewInit call always generates an OpenGL error; clear the flag(s) by calling glGetError();
-    glGetError();  
+    glGetError();
 
     // enable OpenGL debug context if context allows for debug context
     GLint flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
@@ -122,7 +120,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
- 
+
     // OpenGL initial state
     Shader shader("debugging.vs", "debugging.frag");
 
@@ -132,7 +130,7 @@ int main()
          // back face
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, // Bottom-left
          0.5f,  0.5f, -0.5f,  1.0f,  1.0f, // top-right
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f, // bottom-right         
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f, // bottom-right
          0.5f,  0.5f, -0.5f,  1.0f,  1.0f, // top-right
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, // bottom-left
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f, // top-left
@@ -153,10 +151,10 @@ int main()
          // right face
          0.5f,  0.5f,  0.5f,  1.0f,  0.0f, // top-left
          0.5f, -0.5f, -0.5f,  0.0f,  1.0f, // bottom-right
-         0.5f,  0.5f, -0.5f,  1.0f,  1.0f, // top-right         
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f, // top-right
          0.5f, -0.5f, -0.5f,  0.0f,  1.0f, // bottom-right
          0.5f,  0.5f,  0.5f,  1.0f,  0.0f, // top-left
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, // bottom-left     
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, // bottom-left
          // bottom face
         -0.5f, -0.5f, -0.5f,  0.0f,  1.0f, // top-right
          0.5f, -0.5f, -0.5f,  1.0f,  1.0f, // top-left
@@ -167,10 +165,10 @@ int main()
          // top face
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f, // top-left
          0.5f,  0.5f,  0.5f,  1.0f,  0.0f, // bottom-right
-         0.5f,  0.5f, -0.5f,  1.0f,  1.0f, // top-right     
+         0.5f,  0.5f, -0.5f,  1.0f,  1.0f, // top-right
          0.5f,  0.5f,  0.5f,  1.0f,  0.0f, // bottom-right
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f, // top-left
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f  // bottom-left        
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f  // bottom-left
     };
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &cubeVBO);
@@ -212,7 +210,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         // check and call events
-        glfwPollEvents();      
+        glfwPollEvents();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

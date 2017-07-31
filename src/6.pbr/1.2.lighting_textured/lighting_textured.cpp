@@ -2,7 +2,6 @@
 #include <string>
 
 // GLEW
-#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
@@ -149,14 +148,14 @@ int main()
 
         // render rows*column number of spheres with material properties defined by textures (they all have the same material properties)
         glm::mat4 model;
-        for (int row = 0; row < nrRows; ++row) 
+        for (int row = 0; row < nrRows; ++row)
         {
-            for (int col = 0; col < nrColumns; ++col) 
+            for (int col = 0; col < nrColumns; ++col)
             {
                 model = glm::mat4();
                 model = glm::translate(model, glm::vec3(
-                    (float)(col - (nrColumns / 2)) * spacing, 
-                    (float)(row - (nrRows / 2)) * spacing, 
+                    (float)(col - (nrColumns / 2)) * spacing,
+                    (float)(row - (nrRows / 2)) * spacing,
                     0.0f
                 ));
                 glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
@@ -165,7 +164,7 @@ int main()
         }
 
         // render light source (simply re-render sphere at light positions)
-        // this looks a bit off as we use the same shader, but it'll make their positions obvious and 
+        // this looks a bit off as we use the same shader, but it'll make their positions obvious and
         // keeps the codeprint small.
         for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
         {
@@ -217,7 +216,7 @@ void renderSphere()
             {
                 float xSegment = (float)x / (float)X_SEGMENTS;
                 float ySegment = (float)y / (float)Y_SEGMENTS;
-                float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI); 
+                float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
                 float yPos = std::cos(ySegment * PI);
                 float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
 
@@ -286,12 +285,12 @@ void renderSphere()
     glDrawElements(GL_TRIANGLE_STRIP, indexCount, GL_UNSIGNED_INT, 0);
 }
 
-// This function loads a texture from file. Note: texture loading functions like these are usually 
-// managed by a 'Resource Manager' that manages all resources (like textures, models, audio). 
+// This function loads a texture from file. Note: texture loading functions like these are usually
+// managed by a 'Resource Manager' that manages all resources (like textures, models, audio).
 // For learning purposes we'll just define it as a utility function.
 GLuint loadTexture(GLchar const * path)
 {
-    //Generate texture ID and load texture data 
+    //Generate texture ID and load texture data
     GLuint textureID;
     glGenTextures(1, &textureID);
     int width, height;

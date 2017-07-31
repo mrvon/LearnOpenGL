@@ -2,7 +2,6 @@
 #include <string>
 
 // GLEW
-#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
@@ -78,7 +77,7 @@ int main()
     GLuint diffuseMap = loadTexture(FileSystem::getPath("resources/textures/brickwall.jpg").c_str());
     GLuint normalMap = loadTexture(FileSystem::getPath("resources/textures/brickwall_normal.jpg").c_str());
 
-    // Set texture units 
+    // Set texture units
     shader.Use();
     glUniform1i(glGetUniformLocation(shader.Program, "diffuseMap"), 0);
     glUniform1i(glGetUniformLocation(shader.Program, "normalMap"), 1);
@@ -228,12 +227,12 @@ void RenderQuad()
     glBindVertexArray(0);
 }
 
-// This function loads a texture from file. Note: texture loading functions like these are usually 
-// managed by a 'Resource Manager' that manages all resources (like textures, models, audio). 
+// This function loads a texture from file. Note: texture loading functions like these are usually
+// managed by a 'Resource Manager' that manages all resources (like textures, models, audio).
 // For learning purposes we'll just define it as a utility function.
 GLuint loadTexture(GLchar const * path)
 {
-    //Generate texture ID and load texture data 
+    //Generate texture ID and load texture data
     GLuint textureID;
     glGenTextures(1, &textureID);
     int width, height;

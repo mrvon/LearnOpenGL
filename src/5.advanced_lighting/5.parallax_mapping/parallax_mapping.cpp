@@ -2,7 +2,6 @@
 #include <string>
 
 // GLEW
-#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
@@ -87,7 +86,7 @@ int main()
     //GLuint normalMap = loadTexture(FileSystem::getPath("resources/textures/toy_box_normal.png").c_str());
     //GLuint heightMap = loadTexture(FileSystem::getPath("resources/textures/toy_box_disp.png").c_str());
 
-    // Set texture units 
+    // Set texture units
     shader.Use();
     glUniform1i(glGetUniformLocation(shader.Program, "diffuseMap"), 0);
 	glUniform1i(glGetUniformLocation(shader.Program, "normalMap"), 1);
@@ -119,7 +118,7 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         // Render normal-mapped quad
-        glm::mat4 model; 
+        glm::mat4 model;
         //model = glm::rotate(model, (GLfloat)glfwGetTime() * -10, glm::normalize(glm::vec3(1.0, 0.0, 1.0))); // Rotates the quad to show parallax mapping works in all directions
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         glUniform3fv(glGetUniformLocation(shader.Program, "lightPos"), 1, &lightPos[0]);
@@ -242,12 +241,12 @@ void RenderQuad()
     glBindVertexArray(0);
 }
 
-// This function loads a texture from file. Note: texture loading functions like these are usually 
-// managed by a 'Resource Manager' that manages all resources (like textures, models, audio). 
+// This function loads a texture from file. Note: texture loading functions like these are usually
+// managed by a 'Resource Manager' that manages all resources (like textures, models, audio).
 // For learning purposes we'll just define it as a utility function.
 GLuint loadTexture(GLchar const * path)
 {
-    //Generate texture ID and load texture data 
+    //Generate texture ID and load texture data
     GLuint textureID;
     glGenTextures(1, &textureID);
     int width, height;

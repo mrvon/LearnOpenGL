@@ -2,7 +2,6 @@
 #include <string>
 
 // GLEW
-#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
@@ -130,7 +129,7 @@ int main()
 
         5.0f,  -0.5f,  5.0f,  2.0f, 0.0f,
         -5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
-        5.0f,  -0.5f, -5.0f,  2.0f, 2.0f								
+        5.0f,  -0.5f, -5.0f,  2.0f, 2.0f
     };
     // Setup cube VAO
     GLuint cubeVAO, cubeVBO;
@@ -179,7 +178,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Draw objects
-        shader.Use(); 
+        shader.Use();
         glm::mat4 model;
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = glm::perspective(camera.Zoom, (float)screenWidth/(float)screenHeight, 0.1f, 100.0f);
@@ -187,7 +186,7 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         // Cubes
         glBindVertexArray(cubeVAO);
-        glBindTexture(GL_TEXTURE_2D, cubeTexture);  // We omit the glActiveTexture part since TEXTURE0 is already the default active texture unit. (sampler used in fragment is set to 0 as well as default)		
+        glBindTexture(GL_TEXTURE_2D, cubeTexture);  // We omit the glActiveTexture part since TEXTURE0 is already the default active texture unit. (sampler used in fragment is set to 0 as well as default)
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -201,7 +200,7 @@ int main()
         model = glm::mat4();
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        glBindVertexArray(0);				
+        glBindVertexArray(0);
 
 
         // Swap the buffers
@@ -212,12 +211,12 @@ int main()
     return 0;
 }
 
-// This function loads a texture from file. Note: texture loading functions like these are usually 
-// managed by a 'Resource Manager' that manages all resources (like textures, models, audio). 
+// This function loads a texture from file. Note: texture loading functions like these are usually
+// managed by a 'Resource Manager' that manages all resources (like textures, models, audio).
 // For learning purposes we'll just define it as a utility function.
 GLuint loadTexture(GLchar const * path)
 {
-    //Generate texture ID and load texture data 
+    //Generate texture ID and load texture data
     GLuint textureID;
     glGenTextures(1, &textureID);
     int width,height;
@@ -225,7 +224,7 @@ GLuint loadTexture(GLchar const * path)
     // Assign texture to ID
     glBindTexture(GL_TEXTURE_2D, textureID);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glGenerateMipmap(GL_TEXTURE_2D);	
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     // Parameters
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -263,7 +262,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if(action == GLFW_PRESS)
         keys[key] = true;
     else if(action == GLFW_RELEASE)
-        keys[key] = false;	
+        keys[key] = false;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -276,13 +275,13 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
 
     GLfloat xoffset = xpos - lastX;
-    GLfloat yoffset = lastY - ypos; 
-    
+    GLfloat yoffset = lastY - ypos;
+
     lastX = xpos;
     lastY = ypos;
 
     camera.ProcessMouseMovement(xoffset, yoffset);
-}	
+}
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
