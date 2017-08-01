@@ -6,8 +6,19 @@ out vec4 color;
 uniform vec3 cameraPos;
 uniform samplerCube skybox;
 
-void main() {
+void reflect() {
     vec3 I = normalize(Position - cameraPos);
     vec3 R = reflect(I, normalize(Normal));
     color = texture(skybox, R);
+}
+
+void refract() {
+    float ratio = 1.00 / 1.52;
+    vec3 I = normalize(Position - cameraPos);
+    vec3 R = refract(I, normalize(Normal), ratio);
+    color = texture(skybox, R);
+}
+
+void main() {
+    refract();
 }

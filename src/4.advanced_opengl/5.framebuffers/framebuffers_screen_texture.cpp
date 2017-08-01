@@ -199,9 +199,11 @@ int main() {
     GLuint framebuffer;
     glGenFramebuffers(1, &framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
     // Create a color attachment texture
     GLuint textureColorbuffer = generateAttachmentTexture(false, false);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+
     // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
     GLuint rbo;
     glGenRenderbuffers(1, &rbo);
@@ -217,7 +219,7 @@ int main() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Draw as wireframe
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // Game loop
     while (!glfwWindowShouldClose(window)) {
@@ -230,21 +232,25 @@ int main() {
         glfwPollEvents();
         do_movement();
 
-        /////////////////////////////////////////////////////
-        // Bind to framebuffer and draw to color texture
-        // as we normally would.
-        // //////////////////////////////////////////////////
+        // Bind to framebuffer and draw to color texture as we normally would.
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
         // Clear all attached buffers
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // We're not using stencil buffer so why bother with clearing?
+        // We're not using stencil buffer so why bother with clearing?
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glEnable(GL_DEPTH_TEST);
+
         // Set uniforms
         shader.Use();
         glm::mat4 model;
         glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 projection = glm::perspective(camera.Zoom, (float)screenWidth/(float)screenHeight, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(
+                camera.Zoom,
+                (float)screenWidth / (float)screenHeight,
+                0.1f,
+                100.0f);
         shader.setMatrix4("view", view);
         shader.setMatrix4("projection", projection);
 
@@ -255,6 +261,7 @@ int main() {
         shader.setMatrix4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
+
         // Cubes
         glBindVertexArray(cubeVAO);
         glBindTexture(GL_TEXTURE_2D, cubeTexture);
@@ -267,23 +274,24 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
 
-        /////////////////////////////////////////////////////
-        // Bind to default framebuffer again and draw the
-        // quad plane with attched screen texture.
-        // //////////////////////////////////////////////////
+        // Bind to default framebuffer again and draw the quad plane with
+        // attched screen texture.
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        // Clear all relevant buffers
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+        // Clear all relevant buffers Set clear color to white (not really
+        // necessery actually, since we won't be able to see behind the quad
+        // anyways)
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST); // We don't care about depth information when rendering a single quad
+        // We don't care about depth information when rendering a single quad
+        glDisable(GL_DEPTH_TEST);
 
         // Draw Screen
         screenShader.Use();
         glBindVertexArray(quadVAO);
-        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// Use the color attachment texture as the texture of the quad plane
+        // Use the color attachment texture as the texture of the quad plane
+        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
-
 
         // Swap the buffers
         glfwSwapBuffers(window);
@@ -293,6 +301,7 @@ int main() {
     glDeleteFramebuffers(1, &framebuffer);
 
     glfwTerminate();
+
     return 0;
 }
 

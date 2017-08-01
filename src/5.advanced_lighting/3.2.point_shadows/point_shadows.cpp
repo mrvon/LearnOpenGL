@@ -24,7 +24,7 @@ const GLuint SCR_WIDTH = 800, SCR_HEIGHT = 600;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void Do_Movement();
+void do_movement();
 GLuint loadTexture(GLchar const * path);
 void RenderScene(Shader &shader);
 void RenderCube();
@@ -71,7 +71,9 @@ int main()
     glewInit();
 
     // Define the viewport dimensions
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
 
     // Setup some OpenGL options
     glEnable(GL_DEPTH_TEST);
@@ -128,7 +130,7 @@ int main()
 
         // Check and call events
         glfwPollEvents();
-        Do_Movement();
+        do_movement();
 
         // Move light position over time
         //lightPos.z = sin(glfwGetTime() * 0.5) * 3.0;
@@ -327,7 +329,7 @@ GLuint loadTexture(GLchar const * path)
 bool keys[1024];
 bool keysPressed[1024];
 // Moves/alters the camera positions based on user input
-void Do_Movement()
+void do_movement()
 {
     // Camera controls
     if (keys[GLFW_KEY_W])

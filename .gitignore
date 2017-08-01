@@ -4,3 +4,4 @@ build/
 .idea/
 .DS_Store
 cmake-build-debug
+.ycm_extra_conf.py

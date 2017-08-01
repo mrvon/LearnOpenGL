@@ -17,7 +17,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 // Other Libs
-#include <SOIL.h>
 #include <learnopengl/filesystem.h>
 #include <learnopengl/utility.h>
 

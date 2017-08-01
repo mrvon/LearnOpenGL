@@ -22,7 +22,7 @@ GLuint screenWidth = 800, screenHeight = 600;
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void Do_Movement();
+void do_movement();
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 155.0f));
@@ -160,7 +160,7 @@ int main()
 
         // Check and call events
         glfwPollEvents();
-        Do_Movement();
+        do_movement();
 
         // Clear buffers
         glClearColor(0.03f, 0.03f, 0.03f, 1.0f);
@@ -209,7 +209,7 @@ int main()
 #pragma region "User input"
 
 // Moves/alters the camera positions based on user input
-void Do_Movement()
+void do_movement()
 {
     // Camera controls
     if(keys[GLFW_KEY_W])

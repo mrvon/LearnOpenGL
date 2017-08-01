@@ -27,7 +27,7 @@ const GLuint SCR_WIDTH = 1280, SCR_HEIGHT = 720;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void Do_Movement();
+void do_movement();
 void RenderCube();
 void RenderQuad();
 
@@ -221,7 +221,7 @@ int main()
 
         // Check and call events
         glfwPollEvents();
-        Do_Movement();
+        do_movement();
 
         // 1. Geometry Pass: render scene's geometry/color data into gbuffer
         glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
@@ -445,7 +445,7 @@ void RenderCube()
 bool keys[1024];
 bool keysPressed[1024];
 // Moves/alters the camera positions based on user input
-void Do_Movement()
+void do_movement()
 {
     // Camera controls
     if (keys[GLFW_KEY_W])

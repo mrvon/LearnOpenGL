@@ -24,7 +24,7 @@ const GLuint SCR_WIDTH = 800, SCR_HEIGHT = 600;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void Do_Movement();
+void do_movement();
 GLuint loadTexture(GLchar const * path, bool gammaCorrection);
 
 // Camera
@@ -64,11 +64,17 @@ int main()
     glewInit();
 
     // Define the viewport dimensions
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
 
     // Setup some OpenGL options
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_FRAMEBUFFER_SRGB); // This enables OpenGL's built-in sRGB support. Once enabled, all subsequent fragment outputs (into framebuffer's color buffer(s)) are first gamma corrected.
+
+    // This enables OpenGL's built-in sRGB support. Once enabled, all subsequent
+    // fragment outputs (into framebuffer's color buffer(s)) are first gamma
+    // corrected.
+    //glEnable(GL_FRAMEBUFFER_SRGB);
 
     // Setup and compile our shaders
     Shader shader("gamma_correction.vs", "gamma_correction.frag");
@@ -83,6 +89,7 @@ int main()
         -5.0f, -0.5f, -5.0f,  0.0f, 1.0f, 0.0f,  0.0f, 5.0f,
          5.0f, -0.5f, -5.0f,  0.0f, 1.0f, 0.0f,  5.0f, 5.0f
     };
+
     // Setup plane VAO
     GLuint planeVAO, planeVBO;
     glGenVertexArrays(1, &planeVAO);
@@ -126,7 +133,7 @@ int main()
 
         // Check and call events
         glfwPollEvents();
-        Do_Movement();
+        do_movement();
 
         // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -188,18 +195,21 @@ GLuint loadTexture(GLchar const * path, bool gammaCorrection)
 bool keys[1024];
 bool keysPressed[1024];
 // Moves/alters the camera positions based on user input
-void Do_Movement()
+void do_movement()
 {
     // Camera controls
-    if (keys[GLFW_KEY_W])
+    if (keys[GLFW_KEY_W]) {
         camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (keys[GLFW_KEY_S])
+    }
+    if (keys[GLFW_KEY_S]) {
         camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (keys[GLFW_KEY_A])
+    }
+    if (keys[GLFW_KEY_A]) {
         camera.ProcessKeyboard(LEFT, deltaTime);
-    if (keys[GLFW_KEY_D])
+    }
+    if (keys[GLFW_KEY_D]) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
-
+    }
     if (keys[GLFW_KEY_SPACE] && !keysPressed[GLFW_KEY_SPACE])
     {
         gammaEnabled = !gammaEnabled;
@@ -212,14 +222,15 @@ bool firstMouse = true;
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 
     if (key >= 0 && key <= 1024)
     {
-        if (action == GLFW_PRESS)
+        if (action == GLFW_PRESS) {
             keys[key] = true;
-        else if (action == GLFW_RELEASE)
+        } else if (action == GLFW_RELEASE)
         {
             keys[key] = false;
             keysPressed[key] = false;
@@ -227,10 +238,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if (firstMouse)
-    {
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (firstMouse) {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
@@ -245,7 +254,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(yoffset);
 }

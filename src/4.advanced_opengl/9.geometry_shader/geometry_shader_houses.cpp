@@ -14,8 +14,7 @@ bool keys[1024];
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // The MAIN function, from here we start our application and run our Game loop
-int main()
-{
+int main() {
     // Init GLFW
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -57,6 +56,7 @@ int main()
          0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
         -0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // Bottom-left
     };
+
     GLuint VBO, VAO;
     glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &VAO);
@@ -72,8 +72,7 @@ int main()
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // Game loop
-    while(!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // Check and call events
         glfwPollEvents();
 
@@ -96,13 +95,15 @@ int main()
 }
 
 // Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 
-    if(action == GLFW_PRESS)
+    if (action == GLFW_PRESS) {
         keys[key] = true;
-    else if(action == GLFW_RELEASE)
+    }
+    else if (action == GLFW_RELEASE) {
         keys[key] = false;
+    }
 }

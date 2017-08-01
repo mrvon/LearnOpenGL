@@ -12,8 +12,7 @@ out VS_OUT {
 uniform mat4 projection;
 uniform mat4 view;
 
-void main()
-{
+void main() {
     gl_Position = projection * view * vec4(position, 1.0f);
     vs_out.FragPos = position;
     vs_out.Normal = normal;

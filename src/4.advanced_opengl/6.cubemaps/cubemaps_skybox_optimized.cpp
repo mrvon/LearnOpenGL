@@ -187,6 +187,7 @@ int main() {
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
     glBindVertexArray(0);
+
     // Setup skybox VAO
     GLuint skyboxVAO, skyboxVBO;
     glGenVertexArrays(1, &skyboxVAO);
@@ -226,16 +227,20 @@ int main() {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
         // Draw scene as normal
         shader.Use();
         glm::mat4 model;
         glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 projection = glm::perspective(camera.Zoom, (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(
+                camera.Zoom,
+                (float)screenWidth / (float)screenHeight,
+                0.1f,
+                100.0f);
         shader.setMatrix4("model", model);
         shader.setMatrix4("view", view);
         shader.setMatrix4("projection", projection);
-        glUniform3f(glGetUniformLocation(shader.Program, "cameraPos"), camera.Position.x, camera.Position.y, camera.Position.z);
+        shader.setVec3("cameraPos", camera.Position);
+
         // Cubes
         glBindVertexArray(cubeVAO);
         glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
@@ -243,9 +248,12 @@ int main() {
         glBindVertexArray(0);
 
         // Draw skybox as last
-        glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
+        // Change depth function so depth test passes when values are equal to
+        // depth buffer's content
+        glDepthFunc(GL_LEQUAL);
         skyboxShader.Use();
-        view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation component of the view matrix
+        // Remove any translation component of the view matrix
+        view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
         skyboxShader.setMatrix4("view", view);
         skyboxShader.setMatrix4("projection", projection);
         // skybox cube
@@ -253,8 +261,9 @@ int main() {
         glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
-        glDepthFunc(GL_LESS); // Set depth function back to default
 
+        // Set depth function back to default
+        glDepthFunc(GL_LESS);
 
         // Swap the buffers
         glfwSwapBuffers(window);
@@ -283,7 +292,16 @@ GLuint loadCubemap(std::vector<std::string> faces) {
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
     for (GLuint i = 0; i < faces.size(); i++) {
         image = SOIL_load_image(faces[i].c_str(), &width, &height, 0, SOIL_LOAD_RGB);
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glTexImage2D(
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                0,
+                GL_RGB,
+                width,
+                height,
+                0,
+                GL_RGB,
+                GL_UNSIGNED_BYTE,
+                image);
     }
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

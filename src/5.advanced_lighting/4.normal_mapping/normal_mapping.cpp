@@ -28,7 +28,7 @@ const GLuint SCR_WIDTH = 800, SCR_HEIGHT = 600;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void Do_Movement();
+void do_movement();
 GLuint loadTexture(GLchar const * path);
 void RenderQuad();
 
@@ -95,7 +95,7 @@ int main()
 
         // Check and call events
         glfwPollEvents();
-        Do_Movement();
+        do_movement();
 
         // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -257,7 +257,7 @@ GLuint loadTexture(GLchar const * path)
 bool keys[1024];
 bool keysPressed[1024];
 // Moves/alters the camera positions based on user input
-void Do_Movement()
+void do_movement()
 {
     // Camera controls
     if (keys[GLFW_KEY_W])

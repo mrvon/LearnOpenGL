@@ -28,7 +28,5 @@ void show3() {
 }
 
 void main() {
-    // show1();
-    // show2();
     show3();
 }

@@ -24,7 +24,7 @@ const GLuint SCR_WIDTH = 800, SCR_HEIGHT = 600;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void Do_Movement();
+void do_movement();
 GLuint loadTexture(GLchar const * path);
 
 // Camera
@@ -38,8 +38,7 @@ GLfloat lastFrame = 0.0f;
 GLboolean blinn = false;
 
 // The MAIN function, from here we start our application and run our Game loop
-int main()
-{
+int main() {
     // Init GLFW
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -64,7 +63,9 @@ int main()
     glewInit();
 
     // Define the viewport dimensions
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    int width, height;
+    glfwGetFramebufferSize(window, &width, &height);
+    glViewport(0, 0, width, height);
 
     // Setup some OpenGL options
     glEnable(GL_DEPTH_TEST);
@@ -104,8 +105,7 @@ int main()
     GLuint floorTexture = loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str());
 
     // Game loop
-    while(!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // Set frame time
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -113,7 +113,7 @@ int main()
 
         // Check and call events
         glfwPollEvents();
-        Do_Movement();
+        do_movement();
 
         // Clear the colorbuffer
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -148,8 +148,7 @@ int main()
 // This function loads a texture from file. Note: texture loading functions like these are usually
 // managed by a 'Resource Manager' that manages all resources (like textures, models, audio).
 // For learning purposes we'll just define it as a utility function.
-GLuint loadTexture(GLchar const * path)
-{
+GLuint loadTexture(GLchar const * path) {
     // Generate texture ID and load texture data
     GLuint textureID;
     glGenTextures(1, &textureID);
@@ -174,20 +173,21 @@ GLuint loadTexture(GLchar const * path)
 bool keys[1024];
 bool keysPressed[1024];
 // Moves/alters the camera positions based on user input
-void Do_Movement()
-{
+void do_movement() {
     // Camera controls
-    if(keys[GLFW_KEY_W])
+    if (keys[GLFW_KEY_W]) {
         camera.ProcessKeyboard(FORWARD, deltaTime);
-    if(keys[GLFW_KEY_S])
+    }
+    if (keys[GLFW_KEY_S]) {
         camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if(keys[GLFW_KEY_A])
+    }
+    if (keys[GLFW_KEY_A]) {
         camera.ProcessKeyboard(LEFT, deltaTime);
-    if(keys[GLFW_KEY_D])
+    }
+    if (keys[GLFW_KEY_D]) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
-
-    if (keys[GLFW_KEY_B] && !keysPressed[GLFW_KEY_B])
-    {
+    }
+    if (keys[GLFW_KEY_B] && !keysPressed[GLFW_KEY_B]) {
         blinn = !blinn;
         keysPressed[GLFW_KEY_B] = true;
     }
@@ -196,27 +196,23 @@ void Do_Movement()
 GLfloat lastX = 400, lastY = 300;
 bool firstMouse = true;
 // Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 
-    if (key >= 0 && key <= 1024)
-    {
-        if (action == GLFW_PRESS)
+    if (key >= 0 && key <= 1024) {
+        if (action == GLFW_PRESS) {
             keys[key] = true;
-        else if (action == GLFW_RELEASE)
-        {
+        } else if (action == GLFW_RELEASE) {
             keys[key] = false;
             keysPressed[key] = false;
         }
     }
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if(firstMouse)
-    {
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (firstMouse) {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
@@ -231,7 +227,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(yoffset);
 }

@@ -22,7 +22,7 @@ GLuint screenWidth = 800, screenHeight = 600;
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void Do_Movement();
+void do_movement();
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -34,12 +34,11 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // The MAIN function, from here we start our application and run our Game loop
-int main()
-{
+int main() {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -76,8 +75,6 @@ int main()
     Shader shaderGreen("uniform_buffers.vs", "green.frag");
     Shader shaderBlue("uniform_buffers.vs", "blue.frag");
     Shader shaderYellow("uniform_buffers.vs", "yellow.frag");
-
-    #pragma region "object_initialization"
 
     GLfloat cubeVertices[] = {
         -0.5f, -0.5f, -0.5f,
@@ -134,8 +131,6 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
     glBindVertexArray(0);
 
-    #pragma endregion
-
     // Create a uniform buffer object
     // First. We get the relevant block indices
     GLuint uniformBlockIndexRed = glGetUniformBlockIndex(shaderRed.Program, "Matrices");
@@ -164,8 +159,7 @@ int main()
 
 
     // Game loop
-    while(!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // Set frame time
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -173,7 +167,7 @@ int main()
 
         // Check and call events
         glfwPollEvents();
-        Do_Movement();
+        do_movement();
 
         // Clear buffers
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -220,38 +214,40 @@ int main()
     glfwTerminate();
     return 0;
 }
-#pragma region "User input"
 
 // Moves/alters the camera positions based on user input
-void Do_Movement()
-{
+void do_movement() {
     // Camera controls
-    if(keys[GLFW_KEY_W])
+    if (keys[GLFW_KEY_W]) {
         camera.ProcessKeyboard(FORWARD, deltaTime);
-    if(keys[GLFW_KEY_S])
+    }
+    if (keys[GLFW_KEY_S]) {
         camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if(keys[GLFW_KEY_A])
+    }
+    if (keys[GLFW_KEY_A]) {
         camera.ProcessKeyboard(LEFT, deltaTime);
-    if(keys[GLFW_KEY_D])
+    }
+    if (keys[GLFW_KEY_D]) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
 }
 
 // Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 
-    if(action == GLFW_PRESS)
+    if (action == GLFW_PRESS) {
         keys[key] = true;
-    else if(action == GLFW_RELEASE)
+    }
+    else if (action == GLFW_RELEASE) {
         keys[key] = false;
+    }
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if(firstMouse)
-    {
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (firstMouse) {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
@@ -265,5 +261,3 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
-
-#pragma endregion
