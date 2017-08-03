@@ -81,8 +81,8 @@ int main() {
     glDepthFunc(GL_LESS);
 
     // Setup and compile our shaders
-    Shader shader("cubemaps.vs", "cubemaps.frag");
-    Shader skyboxShader("skybox.vs", "skybox.frag");
+    Shader shader("cubemaps.vert", "cubemaps.frag");
+    Shader skyboxShader("skybox.vert", "skybox.frag");
 
     // Set the object data (buffers, vertex attributes)
     GLfloat cubeVertices[] = {

@@ -80,7 +80,7 @@ int main() {
     glEnable(GL_CULL_FACE);
 
     // Setup and compile our shaders
-    Shader shader("blending_sorted.vs", "blending_sorted.frag");
+    Shader shader("blending_sorted.vert", "blending_sorted.frag");
 
     // Remember: to specify vertices in a counter-clockwise winding order you
     // need to visualize the triangle as if you're in front of the triangle and

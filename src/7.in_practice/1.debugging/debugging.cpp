@@ -122,7 +122,7 @@ int main()
 
 
     // OpenGL initial state
-    Shader shader("debugging.vs", "debugging.frag");
+    Shader shader("debugging.vert", "debugging.frag");
 
     // configure 3D cube
     GLuint cubeVAO, cubeVBO;

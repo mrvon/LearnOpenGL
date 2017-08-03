@@ -76,9 +76,9 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	// Setup and compile our shaders
-	Shader shaderGeometryPass("g_buffer.vs", "g_buffer.frag");
-	Shader shaderLightingPass("deferred_shading.vs", "deferred_shading.frag");
-	Shader shaderLightBox("deferred_light_box.vs", "deferred_light_box.frag");
+	Shader shaderGeometryPass("g_buffer.vert", "g_buffer.frag");
+	Shader shaderLightingPass("deferred_shading.vert", "deferred_shading.frag");
+	Shader shaderLightBox("deferred_light_box.vert", "deferred_light_box.frag");
 
 	// Set samplers
     shaderLightingPass.Use();

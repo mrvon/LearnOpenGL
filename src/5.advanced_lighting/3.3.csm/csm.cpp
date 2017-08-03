@@ -73,9 +73,8 @@ int main()
     // glDepthFunc(GL_ALWAYS); // Set to always pass the depth test (same effect as glDisable(GL_DEPTH_TEST))
 
     // Setup and compile our shaders
-    Shader shader("depth_testing.vs", "depth_testing.frag");
+    Shader shader("csm.vert", "csm.frag");
 
-    #pragma region "object_initialization"
     // Set the object data (buffers, vertex attributes)
     GLfloat cubeVertices[] = {
         // Positions          // Texture Coords
@@ -159,7 +158,6 @@ int main()
     // Load textures
     GLuint cubeTexture = loadTexture(FileSystem::getPath("resources/textures/marble.jpg").c_str());
     GLuint floorTexture = loadTexture(FileSystem::getPath("resources/textures/metal.png").c_str());
-    #pragma endregion
 
     // Game loop
     while(!glfwWindowShouldClose(window))
@@ -233,11 +231,9 @@ GLuint loadTexture(GLchar const * path)
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
     SOIL_free_image_data(image);
+
     return textureID;
-
 }
-
-#pragma region "User input"
 
 // Moves/alters the camera positions based on user input
 void do_movement()
@@ -287,5 +283,3 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
 }
-
-#pragma endregion

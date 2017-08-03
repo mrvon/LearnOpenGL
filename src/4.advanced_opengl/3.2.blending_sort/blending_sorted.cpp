@@ -81,7 +81,7 @@ int main() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Setup and compile our shaders
-    Shader shader("blending_sorted.vs", "blending_sorted.frag");
+    Shader shader("blending_sorted.vert", "blending_sorted.frag");
 
     // Set the object data (buffers, vertex attributes)
     GLfloat cubeVertices[] = {

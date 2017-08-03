@@ -82,8 +82,8 @@ int main() {
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     // Setup and compile our shaders
-    Shader shader("stencil_testing.vs", "stencil_testing.frag");
-    Shader shaderSingleColor("stencil_testing.vs", "stencil_single_color.frag");
+    Shader shader("stencil_testing.vert", "stencil_testing.frag");
+    Shader shaderSingleColor("stencil_testing.vert", "stencil_single_color.frag");
 
     // Set the object data (buffers, vertex attributes)
     GLfloat cubeVertices[] = {

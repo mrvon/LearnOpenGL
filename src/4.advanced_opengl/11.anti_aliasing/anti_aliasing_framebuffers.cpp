@@ -36,8 +36,8 @@ GLfloat lastFrame = 0.0f;
 int main() {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -72,7 +72,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shader("anti_aliasing.vs", "anti_aliasing.frag");
+    Shader shader("anti_aliasing.vert", "anti_aliasing.frag");
 
     // Set the object data (buffers, vertex attributes)
     GLfloat cubeVertices[] = {
@@ -119,6 +119,7 @@ int main() {
         -0.5f,  0.5f,  0.5f,
         -0.5f,  0.5f, -0.5f
     };
+
     // Setup cube VAO
     GLuint cubeVAO, cubeVBO;
     glGenVertexArrays(1, &cubeVAO);
@@ -134,9 +135,11 @@ int main() {
     GLuint framebuffer;
     glGenFramebuffers(1, &framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
     // Create a multisampled color attachment texture
     GLuint textureColorBufferMultiSampled = generateMultiSampleTexture(4);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, textureColorBufferMultiSampled, 0);
+
     // Create a renderbuffer object for depth and stencil attachments
     GLuint rbo;
     glGenRenderbuffers(1, &rbo);
@@ -145,10 +148,10 @@ int main() {
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 
     // Game loop
     while (!glfwWindowShouldClose(window)) {
@@ -186,8 +189,8 @@ int main() {
         glfwSwapBuffers(window);
     }
 
-
     glfwTerminate();
+
     return 0;
 }
 
@@ -205,14 +208,18 @@ GLuint generateMultiSampleTexture(GLuint samples) {
 // Moves/alters the camera positions based on user input
 void do_movement() {
     // Camera controls
-    if(keys[GLFW_KEY_W])
+    if(keys[GLFW_KEY_W]) {
         camera.ProcessKeyboard(FORWARD, deltaTime);
-    if(keys[GLFW_KEY_S])
+    }
+    if(keys[GLFW_KEY_S]) {
         camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if(keys[GLFW_KEY_A])
+    }
+    if(keys[GLFW_KEY_A]) {
         camera.ProcessKeyboard(LEFT, deltaTime);
-    if(keys[GLFW_KEY_D])
+    }
+    if(keys[GLFW_KEY_D]) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
 }
 
 // Is called whenever a key is pressed/released via GLFW
@@ -223,8 +230,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     if(action == GLFW_PRESS) {
         keys[key] = true;
-    }
-    else if(action == GLFW_RELEASE) {
+    } else if(action == GLFW_RELEASE) {
         keys[key] = false;
     }
 }

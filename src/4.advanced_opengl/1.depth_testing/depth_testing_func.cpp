@@ -80,7 +80,7 @@ int main() {
     // glDepthFunc(GL_ALWAYS);
 
     // Setup and compile our shaders
-    Shader shader("depth_testing.vs", "depth_testing.frag");
+    Shader shader("depth_testing.vert", "depth_testing.frag");
 
     // Set the object data (buffers, vertex attributes)
     GLfloat cubeVertices[] = {

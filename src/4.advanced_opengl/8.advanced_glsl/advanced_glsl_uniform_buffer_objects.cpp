@@ -71,10 +71,10 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shaderRed("uniform_buffers.vs", "red.frag");
-    Shader shaderGreen("uniform_buffers.vs", "green.frag");
-    Shader shaderBlue("uniform_buffers.vs", "blue.frag");
-    Shader shaderYellow("uniform_buffers.vs", "yellow.frag");
+    Shader shaderRed("uniform_buffers.vert", "red.frag");
+    Shader shaderGreen("uniform_buffers.vert", "green.frag");
+    Shader shaderBlue("uniform_buffers.vert", "blue.frag");
+    Shader shaderYellow("uniform_buffers.vert", "yellow.frag");
 
     GLfloat cubeVertices[] = {
         -0.5f, -0.5f, -0.5f,
@@ -156,7 +156,6 @@ int main() {
     glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
 
     // Game loop
     while (!glfwWindowShouldClose(window)) {

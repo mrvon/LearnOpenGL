@@ -49,8 +49,8 @@ int main()
 {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -80,8 +80,8 @@ int main()
     glEnable(GL_CULL_FACE);
 
     // Setup and compile our shaders
-    Shader shader("point_shadows.vs", "point_shadows.frag");
-    Shader simpleDepthShader("point_shadows_depth.vs", "point_shadows_depth.frag", "point_shadows_depth.gs");
+    Shader shader("point_shadows.vert", "point_shadows.frag");
+    Shader simpleDepthShader("point_shadows_depth.vert", "point_shadows_depth.frag", "point_shadows_depth.geom");
 
     // Set texture samples
     shader.Use();

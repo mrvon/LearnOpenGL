@@ -6,13 +6,13 @@ out vec4 color;
 uniform vec3 cameraPos;
 uniform samplerCube skybox;
 
-void reflect() {
+void reflectEffect() {
     vec3 I = normalize(Position - cameraPos);
     vec3 R = reflect(I, normalize(Normal));
     color = texture(skybox, R);
 }
 
-void refract() {
+void refractEffect() {
     float ratio = 1.00 / 1.52;
     vec3 I = normalize(Position - cameraPos);
     vec3 R = refract(I, normalize(Normal), ratio);
@@ -20,5 +20,5 @@ void refract() {
 }
 
 void main() {
-    refract();
+    refractEffect();
 }

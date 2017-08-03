@@ -79,8 +79,8 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shader("lighting.vs", "lighting.frag");
-    Shader hdrShader("hdr.vs", "hdr.frag");
+    Shader shader("lighting.vert", "lighting.frag");
+    Shader hdrShader("hdr.vert", "hdr.frag");
 
     // Light sources
     // - Positions

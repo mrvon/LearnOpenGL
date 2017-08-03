@@ -84,7 +84,7 @@ int main()
     GLuint ao = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/ao.png").c_str());
 
     // Setup and compile our shaders
-    Shader shader("pbr.vs", "pbr.frag");
+    Shader shader("pbr.vert", "pbr.frag");
 
     // set material texture uniforms
     shader.Use();

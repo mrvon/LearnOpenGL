@@ -82,10 +82,10 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shaderGeometryPass("ssao_geometry.vs", "ssao_geometry.frag");
-    Shader shaderLightingPass("ssao.vs", "ssao_lighting.frag");
-    Shader shaderSSAO("ssao.vs", "ssao.frag");
-    Shader shaderSSAOBlur("ssao.vs", "ssao_blur.frag");
+    Shader shaderGeometryPass("ssao_geometry.vert", "ssao_geometry.frag");
+    Shader shaderLightingPass("ssao.vert", "ssao_lighting.frag");
+    Shader shaderSSAO("ssao.vert", "ssao.frag");
+    Shader shaderSSAOBlur("ssao.vert", "ssao_blur.frag");
 
     // Set samplers
     shaderLightingPass.Use();

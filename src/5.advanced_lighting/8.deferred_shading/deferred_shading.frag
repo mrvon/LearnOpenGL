@@ -9,7 +9,7 @@ uniform sampler2D gAlbedoSpec;
 struct Light {
     vec3 Position;
     vec3 Color;
-    
+
     float Linear;
     float Quadratic;
     float Radius;
@@ -21,13 +21,13 @@ uniform vec3 viewPos;
 uniform int draw_mode;
 
 void main()
-{             
+{
     // Retrieve data from gbuffer
     vec3 FragPos = texture(gPosition, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
     float Specular = texture(gAlbedoSpec, TexCoords).a;
-    
+
     // Then calculate lighting as usual
     vec3 lighting  = Diffuse * 0.1; // hard-coded ambient component
     vec3 viewDir  = normalize(viewPos - FragPos);
@@ -41,7 +41,7 @@ void main()
             vec3 lightDir = normalize(lights[i].Position - FragPos);
             vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * lights[i].Color;
             // Specular
-            vec3 halfwayDir = normalize(lightDir + viewDir);  
+            vec3 halfwayDir = normalize(lightDir + viewDir);
             float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
             vec3 specular = lights[i].Color * spec * Specular;
             // Attenuation
@@ -50,8 +50,8 @@ void main()
             specular *= attenuation;
             lighting += diffuse + specular;
         }
-    }    
-    
+    }
+
     // Based on which of the 1-5 keys we pressed, show final result or intermediate g-buffer textures
     if(draw_mode == 1)
         FragColor = vec4(lighting, 1.0);

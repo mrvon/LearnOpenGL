@@ -81,8 +81,8 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // Build and compile our shader program
-    Shader lightingShader("basic_lighting.vs", "basic_lighting.frag");
-    Shader lampShader("lamp.vs", "lamp.frag");
+    Shader lightingShader("basic_lighting.vert", "basic_lighting.frag");
+    Shader lampShader("lamp.vert", "lamp.frag");
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {

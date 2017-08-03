@@ -71,7 +71,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shader("normal_mapping.vs", "normal_mapping.frag");
+    Shader shader("normal_mapping.vert", "normal_mapping.frag");
 
     // Load textures
     GLuint diffuseMap = loadTexture(FileSystem::getPath("resources/textures/brickwall.jpg").c_str());

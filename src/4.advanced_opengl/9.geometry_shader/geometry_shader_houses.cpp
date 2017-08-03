@@ -17,8 +17,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 int main() {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -47,7 +47,7 @@ int main() {
     glViewport(0, 0, width, height);
 
     // Setup and compile our shaders
-    Shader shader("geometry_shader.vs", "geometry_shader.frag", "geometry_shader.gs");
+    Shader shader("geometry_shader.vert", "geometry_shader.frag", "geometry_shader.geom");
 
     // Vertex data
     GLfloat points[] = {

@@ -185,9 +185,9 @@ foreach(CHAPTER ${CHAPTERS})
 		endif(WIN32)
         # copy shader files to build directory
         file(GLOB SHADERS
-                 "src/${CHAPTER}/${DEMO}/*.vs"
+                 "src/${CHAPTER}/${DEMO}/*.vert"
                  "src/${CHAPTER}/${DEMO}/*.frag"
-                 "src/${CHAPTER}/${DEMO}/*.gs"
+                 "src/${CHAPTER}/${DEMO}/*.geom"
         )
         foreach(SHADER ${SHADERS})
 			if(WIN32)

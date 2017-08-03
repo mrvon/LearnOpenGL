@@ -76,10 +76,10 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	// Setup and compile our shaders
-	Shader shader("bloom.vs", "bloom.frag");
-	Shader shaderLight("bloom.vs", "light_box.frag");
-	Shader shaderBlur("blur.vs", "blur.frag");
-	Shader shaderBloomFinal("bloom_final.vs", "bloom_final.frag");
+	Shader shader("bloom.vert", "bloom.frag");
+	Shader shaderLight("bloom.vert", "light_box.frag");
+	Shader shaderBlur("blur.vert", "blur.frag");
+	Shader shaderBloomFinal("bloom_final.vert", "bloom_final.frag");
 
 	// Set samplers
 	shaderBloomFinal.Use();

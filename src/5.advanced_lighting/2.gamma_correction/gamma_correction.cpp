@@ -77,7 +77,7 @@ int main()
     //glEnable(GL_FRAMEBUFFER_SRGB);
 
     // Setup and compile our shaders
-    Shader shader("gamma_correction.vs", "gamma_correction.frag");
+    Shader shader("gamma_correction.vert", "gamma_correction.frag");
 
     GLfloat planeVertices[] = {
         // Positions          // Normals         // Texture Coords

@@ -79,9 +79,9 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shader("shadow_mapping.vs", "shadow_mapping.frag");
-    Shader simpleDepthShader("shadow_mapping_depth.vs", "shadow_mapping_depth.frag");
-    Shader debugDepthQuad("debug_quad.vs", "debug_quad_depth.frag");
+    Shader shader("shadow_mapping.vert", "shadow_mapping.frag");
+    Shader simpleDepthShader("shadow_mapping_depth.vert", "shadow_mapping_depth.frag");
+    Shader debugDepthQuad("debug_quad.vert", "debug_quad_depth.frag");
 
     // Set texture samples
     shader.Use();

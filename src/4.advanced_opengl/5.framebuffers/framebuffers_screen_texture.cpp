@@ -81,8 +81,8 @@ int main() {
     glDepthFunc(GL_LESS);
 
     // Setup and compile our shaders
-    Shader shader("framebuffers.vs", "framebuffers.frag");
-    Shader screenShader("framebuffers_screen.vs", "framebuffers_screen.frag");
+    Shader shader("framebuffers.vert", "framebuffers.frag");
+    Shader screenShader("framebuffers_screen.vert", "framebuffers_screen.frag");
 
     // Set the object data (buffers, vertex attributes)
     GLfloat cubeVertices[] = {

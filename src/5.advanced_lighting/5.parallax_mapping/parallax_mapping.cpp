@@ -76,7 +76,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shader("parallax_mapping.vs", "parallax_mapping.frag");
+    Shader shader("parallax_mapping.vert", "parallax_mapping.frag");
 
     // Load textures
     GLuint diffuseMap = loadTexture(FileSystem::getPath("resources/textures/bricks2.jpg").c_str());

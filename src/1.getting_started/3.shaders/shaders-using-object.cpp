@@ -51,7 +51,7 @@ int main() {
     glViewport(0, 0, width, height);
 
     // Build and compile our shader program
-    Shader ourShader("basic.vs", "basic.frag");
+    Shader ourShader("basic.vert", "basic.frag");
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {

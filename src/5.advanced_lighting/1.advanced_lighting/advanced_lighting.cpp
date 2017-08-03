@@ -71,7 +71,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shader("advanced_lighting.vs", "advanced_lighting.frag");
+    Shader shader("advanced_lighting.vert", "advanced_lighting.frag");
 
     GLfloat planeVertices[] = {
         // Positions          // Normals         // Texture Coords

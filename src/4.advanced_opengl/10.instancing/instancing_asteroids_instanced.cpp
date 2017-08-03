@@ -34,12 +34,11 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
 // The MAIN function, from here we start our application and run our Game loop
-int main()
-{
+int main() {
     // Init GLFW
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -72,12 +71,12 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader planetShader("planet.vs", "planet.frag");
-    Shader instanceShader("instanced_asteroids.vs", "instanced_asteroids.frag");
+    Shader planetShader("planet.vert", "planet.frag");
+    Shader instanceShader("instanced_asteroids.vert", "instanced_asteroids.frag");
 
     // Load models
-    Model rock(FileSystem::getPath("resources/objects/rock/rock.obj").c_str());
-    Model planet(FileSystem::getPath("resources/objects/planet/planet.obj").c_str());
+    Model rock(FileSystem::getPath("resources/objects/rock/rock.obj"));
+    Model planet(FileSystem::getPath("resources/objects/planet/planet.obj"));
 
     // Set projection matrix
     glm::mat4 projection = glm::perspective(45.0f, (GLfloat)screenWidth/(GLfloat)screenHeight, 1.0f, 10000.0f);
@@ -94,8 +93,7 @@ int main()
     srand(glfwGetTime()); // initialize random seed
     GLfloat radius = 150.0f;
     GLfloat offset = 25.0f;
-    for(GLuint i = 0; i < amount; i++)
-    {
+    for (GLuint i = 0; i < amount; i++) {
         glm::mat4 model;
         // 1. Translation: Randomly displace along circle with radius 'radius' in range [-offset, offset]
         GLfloat angle = (GLfloat)i / (GLfloat)amount * 360.0f;
@@ -128,8 +126,7 @@ int main()
     // Set transformation matrices as an instance vertex attribute (with divisor 1)
     // NOTE: We're cheating a little by taking the, now publicly declared, VAO of the model's mesh(es) and adding new vertexAttribPointers
     // Normally you'd want to do this in a more organized fashion, but for learning purposes this will do.
-    for(GLuint i = 0; i < rock.meshes.size(); i++)
-    {
+    for(GLuint i = 0; i < rock.meshes.size(); i++) {
         GLuint VAO = rock.meshes[i].VAO;
         glBindVertexArray(VAO);
         // Set attribute pointers for matrix (4 times vec4)
@@ -151,8 +148,7 @@ int main()
     }
 
     // Game loop
-    while(!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         // Set frame time
         GLfloat currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -186,8 +182,7 @@ int main()
         glActiveTexture(GL_TEXTURE0); // Activate proper texture unit before binding
         glUniform1i(glGetUniformLocation(instanceShader.Program, "texture_diffuse1"), 0); // Now set the sampler to the correct texture unit
         glBindTexture(GL_TEXTURE_2D, rock.textures_loaded[0].id); // Note we also made the textures_loaded vector public (instead of private) from the model class.
-        for(GLuint i = 0; i < rock.meshes.size(); i++)
-        {
+        for(GLuint i = 0; i < rock.meshes.size(); i++) {
             glBindVertexArray(rock.meshes[i].VAO);
             glDrawElementsInstanced(GL_TRIANGLES, rock.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount);
             glBindVertexArray(0);
@@ -206,38 +201,38 @@ int main()
     return 0;
 }
 
-#pragma region "User input"
-
 // Moves/alters the camera positions based on user input
-void do_movement()
-{
+void do_movement() {
     // Camera controls
-    if(keys[GLFW_KEY_W])
+    if(keys[GLFW_KEY_W]) {
         camera.ProcessKeyboard(FORWARD, deltaTime);
-    if(keys[GLFW_KEY_S])
+    }
+    if(keys[GLFW_KEY_S]) {
         camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if(keys[GLFW_KEY_A])
+    }
+    if(keys[GLFW_KEY_A]) {
         camera.ProcessKeyboard(LEFT, deltaTime);
-    if(keys[GLFW_KEY_D])
+    }
+    if(keys[GLFW_KEY_D]) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
 }
 
 // Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 
-    if(action == GLFW_PRESS)
+    if(action == GLFW_PRESS) {
         keys[key] = true;
-    else if(action == GLFW_RELEASE)
+    } else if(action == GLFW_RELEASE) {
         keys[key] = false;
+    }
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if(firstMouse)
-    {
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if(firstMouse) {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
@@ -251,5 +246,3 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
-
-#pragma endregion

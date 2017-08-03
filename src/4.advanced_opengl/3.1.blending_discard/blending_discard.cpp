@@ -77,7 +77,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shader("blending_discard.vs", "blending_discard.frag");
+    Shader shader("blending_discard.vert", "blending_discard.frag");
 
     // Set the object data (buffers, vertex attributes)
     GLfloat cubeVertices[] = {

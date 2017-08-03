@@ -80,7 +80,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader ourShader("coordinate_systems.vs", "coordinate_systems.frag");
+    Shader ourShader("coordinate_systems.vert", "coordinate_systems.frag");
 
     // Set up our vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {

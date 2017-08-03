@@ -78,7 +78,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // Setup and compile our shaders
-    Shader shader("pbr.vs", "pbr.frag");
+    Shader shader("pbr.vert", "pbr.frag");
 
     // set (constant) material properties
     shader.Use();
