@@ -99,7 +99,8 @@ set(CHAPTERS
 
 set(1.getting_started
     1.hello_window
-    2.hello_triangle
+    2.1.hello_triangle
+    2.2.hello_rectangle
     3.shaders
     4.textures
     5.transformations
